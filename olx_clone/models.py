@@ -45,7 +45,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    class META:
+    class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
@@ -57,7 +57,7 @@ class ProductImages(models.Model):
     def __str__(self):
         return self.product.name
 
-    class META:
+    class Meta:
         verbose_name = 'Product Image'
         verbose_name_plural = 'Product Images'
 
@@ -72,6 +72,6 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
-    class META:
+    class Meta:
         verbose_name = 'Brand'
         verbose_name_plural = 'Brands'

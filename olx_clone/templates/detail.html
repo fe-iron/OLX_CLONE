@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{% for d in prod %}
-    <h1><a href="{% url 'item:product_detail' d.slug %}">{{d.name}}</a></h1>
-{% endfor %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block main_block %}
+    {{ prod }}
+    {{prod_img}}
+{% endblock %}
