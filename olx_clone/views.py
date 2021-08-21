@@ -21,3 +21,22 @@ def category(request):
     cate = Category.objects.all()
     context = {"category": cate}
     return render(request, 'categories.html', context)
+
+
+def allCategory(request, category):
+    category = category.capitalize()
+    cate = Category.objects.all()
+    prod = None
+    if Category.objects.filter(name=category).exists():
+        cat = Category.objects.filter(name=category)
+        prod = Product.objects.filter(category=cat[0])
+
+    context = {
+        "category": cate,
+        "products": prod,
+    }
+    return render(request, "all-classifieds.html", context)
+
+
+
+
