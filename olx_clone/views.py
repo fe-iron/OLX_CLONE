@@ -1,6 +1,7 @@
+from django.db.models import Count
 from django.shortcuts import render
 from .models import Product, ProductImages, Category
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
@@ -24,16 +25,23 @@ def category(request):
 
 
 def allCategory(request, category):
-    category = category.capitalize()
     cate = Category.objects.all()
     prod = None
-    if Category.objects.filter(name=category).exists():
-        cat = Category.objects.filter(name=category)
+    all_category = Category.objects.annotate(total_products=Count('product'))
+
+    if Category.objects.filter(slug=category).exists():
+        cat = Category.objects.filter(slug=category)
         prod = Product.objects.filter(category=cat[0])
+
+    paginator = Paginator(prod, 10)
+    page = request.GET.get('page')
+    prod = paginator.get_page(page)
 
     context = {
         "category": cate,
         "products": prod,
+        "all_category": all_category,
+        "category_obj": cat[0],
     }
     return render(request, "all-classifieds.html", context)
 
