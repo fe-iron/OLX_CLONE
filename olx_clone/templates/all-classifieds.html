@@ -423,9 +423,10 @@
 			<div class="ads-grid">
 				<div class="side-bar col-md-3">
 					<div class="search-hotel">
-					<h3 class="sear-head">Name contains</h3>
-					<form>
-						<input type="text" value="Product name..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Product name...';}" required="">
+					<h3 class="sear-head">Search</h3>
+					<form action="item" method="GET">
+						<input type="text" value="Product name..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Product name...';}" required name="q">
+						<input type="hidden" value="{{category_obj.name}}" name="current_category">
 						<input type="submit" value=" ">
 					</form>
 				</div>
@@ -518,6 +519,16 @@
 									 </div>
 								<div class="clearfix"></div>
 							<ul class="list">
+								{% for msg in messages %}
+									<a href="single.html">
+										<li>
+										<section class="list-left">
+										<h5 class="title">{{msg}}</h5>
+										</section>
+										<div class="clearfix"></div>
+										</li>
+									</a>
+								{% endfor %}
 								{% for prod in products %}
 								<a href="single.html">
 									<li>

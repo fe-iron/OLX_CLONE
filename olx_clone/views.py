@@ -1,4 +1,5 @@
-from django.db.models import Count
+from django.contrib import messages
+from django.db.models import Count, Q
 from django.shortcuts import render
 from .models import Product, ProductImages, Category
 from django.core.paginator import Paginator
@@ -24,7 +25,7 @@ def category(request):
     return render(request, 'categories.html', context)
 
 
-def allCategory(request, category):
+def allCategory(request, category=None):
     cate = Category.objects.all()
     prod = None
     all_category = Category.objects.annotate(total_products=Count('product'))
@@ -32,6 +33,24 @@ def allCategory(request, category):
     if Category.objects.filter(slug=category).exists():
         cat = Category.objects.filter(slug=category)
         prod = Product.objects.filter(category=cat[0])
+
+    search_query = request.GET.get('q', None)
+    if search_query:
+        prod = Product.objects.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(condition__icontains=search_query) |
+            Q(brand__name__icontains=search_query) |
+            Q(category__name__icontains=search_query)
+        )
+        cat = []
+        # condition if search query not found
+        if prod:
+            cat.append(prod[0].category)
+        else:
+            category = request.GET.get('current_category', None)
+            cat.append(category)
+            messages.error(request, "Sorry, no results found!")
 
     paginator = Paginator(prod, 10)
     page = request.GET.get('page')
